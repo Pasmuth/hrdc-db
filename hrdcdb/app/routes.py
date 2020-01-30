@@ -7,6 +7,7 @@ from app import app, db
 from app.forms import *
 from app.models import *
 from app.kiosk import checkin_to_db
+from flask import json
 
 @app.route('/login', methods = ['GET','POST'])
 def login():
@@ -229,7 +230,44 @@ def add_service(clientid):
 	if form.validate_on_submit():
 		form.execute_transaction()
 		return redirect(url_for('add_service', clientid = clientid))
-	return render_template('add_service.html', title = 'Add Service', form = form, data = services, cid = clientid)
+	#return render_template('add_service.html', title = 'Add Service', form = form, data = services, cid = clientid)
+
+	elif request.method == 'GET':
+
+		# check for request parameters
+		if request.args.get('recordID'):
+
+			#get the recorde id that needs to be deletedf
+			recordID = request.args.get('recordID')
+
+			# update database
+			recordToDel = Service.query.filter(Service.id == recordID).all()
+
+			#print("client id: ", type(str(recordToDel[0].client_id)))
+			#print("other client id: ", type(clientid))
+			#print(clientid == str(recordToDel[0].client_id))
+			#print("len: ", len(recordToDel))
+
+			# do some validation
+			if (len(recordToDel) == 1 and str(recordToDel[0].client_id) == clientid):
+				db.session.delete(recordToDel[0])
+				db.session.commit()
+
+				#print("len: ", len(recordToDel))
+				#print("record: ", recordToDel[0].id)
+				return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
+
+			else:
+				#print("somethings wrong with query")
+				return json.dumps({'error': True}), 404, {'ContentType': 'application/json'}
+		# if no parameters are present, its just a regular get
+		else:
+			return render_template('add_service.html', title = 'Add Service', form = form, data = services)
+
+	# if the submit and validate fails
+	else:
+		return render_template('add_service.html', title='Add Service', form=form, data=services)
+
 
 
 @app.route('/client_checkin', methods = ['GET','POST'])
