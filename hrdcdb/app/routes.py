@@ -283,11 +283,22 @@ def add_assessment(clientid):
 	return render_template('add_om_score.html', form = form, cid = clientid)
 
 
+
 @app.route('/create_family_<clientid>', methods = ['GET','POST'])
 def create_family(clientid):
 	prefill = {'client_id':clientid,'created_by':current_user.id}
+	family = Client.query.filter(Client.id == clientid).all()
 	form = CreateFamily(data = prefill)
+	add = MemberAdder()
 	if form.validate_on_submit():
-		form.execute_transaction()
-		return redirect(url_for('client_dashboard', clientid = clientid))
-	return render_template('create_family.html', form = form, cid = clientid)
+		clients = Client.query
+		if form.first_name.data:
+			clients = clients.filter(Client.first_name.like('%{}%'.format(form.first_name.data)))
+		if form.last_name.data:
+			clients = clients.filter(Client.last_name.like('%{}%'.format(form.last_name.data)))
+		return render_template('create_family.html', form = form, adder = add, clients = clients.all())
+	if add.validate_on_submit():
+		if add.add.data:
+			family.append(Client.query.filter(Client.id == add.id))
+			return render_template('create_family.html', form = form, adder = add, clients = clients.all(), family = family)
+	return render_template('create_family.html', form = form, adder = add, cid = clientid)

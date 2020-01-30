@@ -1,15 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="demogFields">
+    <div class="dashboard_Fields">
         <div class="formElement">
             <a href="{{ url_for('universal_form', clientid = client.id)}}" class="dash_button">Print Universal Form</a>
         </div>
-    </div>
-    <div class="formFields">
         <div class="formElement">
             <h2>Client Demographics</h2>
-            <table>
+            <table class="clientView">
                 <tr>
                     <td>Client Name</td> 
                     <td>{{ client.first_name }} {{ client.middle_name }} {{ client.last_name }}</td>
@@ -28,7 +26,7 @@
         <div class="formElement">
             <h2>Address</h2>
             {% if address %}
-            <table>
+            <table class="clientView">
                 <tr>
                     <td>{{ address.address }}</td>
                 </tr>
@@ -46,14 +44,10 @@
             <a href="{{ url_for('add_address', clientid = client.id)}}" class="dash_button">Add Address</a>
         </div>
         
-    </div>
-
-
-    <div class="formFields">
         <div class="formElement">
             <h2>Contact Information</h2>
             {% if contact_info %}
-            <table class="contactInfo">
+            <table class="clientView">
                 <tr>
                     <th>Contact</th>
                     <th>Type</th>
@@ -86,8 +80,8 @@
                 {% endfor%}
             </table>
             {% endif %}
-            <a href="{{ url_for('create_relationship', clientid = client.id)}}" class="button">Add Relationship</a>
-            <a href="{{ url_for('create_family', clientid = client.id)}}" class="button">Create Family</a>
+            <a href="{{ url_for('create_relationship', clientid = client.id)}}" class="dash_button">Add Relationship</a>
+            <a href="{{ url_for('create_family', clientid = client.id)}}" class="dash_button">Create Family</a>
         </div>       
         <div class="formElement">
             <h2>Services</h2>
@@ -107,7 +101,7 @@
                 {% endfor%}
             </table>
             {% endif %}
-            <a href="{{ url_for('add_service', clientid = client.id)}}" class="button">Add new service</a>
+            <a href="{{ url_for('add_service', clientid = client.id)}}" class="dash_button">Add new service</a>
         </div>
         <div class="formElement">
             <h2>Assessments</h2>
@@ -127,7 +121,7 @@
                 {% endfor%}
             </table>
             {% endif %}
-            <a href="{{ url_for('add_assessment', clientid = client.id)}}" class="button">Add new assessment</a>
+            <a href="{{ url_for('add_assessment', clientid = client.id)}}" class="dash_button">Add new assessment</a>
         </div>
     </div>
 {% endblock %}

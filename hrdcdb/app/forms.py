@@ -294,7 +294,15 @@ class CreateFamily(FlaskForm):
 	last_name = StringField('Last Name')
 	dob = DateField('Date of Birth', format='%Y-%m-%d', validators=[Optional()])
 	SSN = StringField('Social Security #')
+	HoH = BooleanField('Head of Household')
 
 	exact_match = BooleanField('Require Exact Match')
 	submit = SubmitField('Find Client')
 	add = SubmitField('Add to Family')
+	remove = SubmitField('Remove')
+
+
+class MemberAdder(FlaskForm):
+	form_title = 'Member Adder'
+
+	add = SubmitField('Add')
