@@ -286,7 +286,6 @@ class CreateFamily(FlaskForm):
 
 	program_choices = [(p.id, p.name) for p in Program.query.all()]
 
-	client_id = IntegerField('ClientID')
 	created_by = IntegerField('UserID')
 	program = SelectField('Program', choices = program_choices, coerce = int)
 	first_name = StringField('First Name')
@@ -300,9 +299,3 @@ class CreateFamily(FlaskForm):
 	submit = SubmitField('Find Client')
 	add = SubmitField('Add to Family')
 	remove = SubmitField('Remove')
-
-
-class MemberAdder(FlaskForm):
-	form_title = 'Member Adder'
-
-	add = SubmitField('Add')

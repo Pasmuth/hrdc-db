@@ -22,6 +22,14 @@ table.clientView {
   background-color: #d9b38c
 }
 
+table.familyView {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  align: center;
+  width: 90%;
+  background-color: #d9b38c
+}
+
 td {
   border: 1px solid #dddddd;
   text-align: left;

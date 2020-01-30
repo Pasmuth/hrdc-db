@@ -46,4 +46,23 @@ window.onload=function(){
         }
     });
 
+    $(".addBtn").on( "click", function() {
+        var $row = jQuery(this).closest('tr');
+        var $recordToAdd = $row.find('.clientID').text();
+        var $urlString = 'create_family'
+
+        $.ajax({
+            url: 'create_family',
+            type: 'GET',
+            data: {'clientID': $recordToAdd,},
+            success: function(response) {
+                $(".familyView").append("<tr><td id='col" + clientID + "'>"+ clientID +"</td></tr>")
+                console.log(response);
+            },
+            error: function(error){
+                console.log(error)
+            }
+        })
+    });
+
 }

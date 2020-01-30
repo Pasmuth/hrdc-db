@@ -3,14 +3,7 @@
 {% block content %}
     <form action="" method="post">
         {{ form.hidden_tag() }}
-        <div class="formFields">
-            <div class="formElement">
-                {{ form.client_id.label }}
-                {{ form.client_id(readonly=True) }}
-                {% for error in form.client_id.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-                {% endfor %}
-            </div>
+        <div class="formFields">            
             <div class="formElement">
                 {{ form.created_by.label }}
                 {{ form.created_by(readonly=True) }}
@@ -27,29 +20,15 @@
             </div>
         </div>
 
-        {% if family %}
-        <table class="clientView">
-        <tr>
-            <th>Client ID</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Gender</th>
-            <th>Date of Birth</th>
-            <th>Created By</th>
-            <th>Go to Dashboard</th>
-        </tr>
-        {% for c in family %}
-        <tr>
-            <td>{{ c.id }}</td>
-            <td>{{ c.first_name }}</td>
-            <td>{{ c.last_name }}</td>
-            <td>{{ c.gen.gender }}</td>
-            <td>{{ c.dob.strftime('%m-%d-%Y') }}</td>
-            <td>{{ form.remove }}</td>
-        </tr>
-        {% endfor%}
-    </table>
-        {% endif %}
+        <table class="familyView">
+            <tr>
+                <th>Client ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Gender</th>
+                <th>Date of Birth</th>
+            </tr>
+        </table>
 
 
         <div class="formFields">
@@ -93,8 +72,6 @@
             </div>    
         </div>
     </form><br>
-    {% if adder %}
-    <form action="" method="post">
     {% if clients %}
         <table class="clientView">
         <tr>
@@ -106,16 +83,14 @@
         </tr>
         {% for c in clients %}
         <tr>
-            <td>{{ c.id }}</td>
+            <td class="clientID">{{ c.id }}</td>
             <td>{{ c.first_name }}</td>
             <td>{{ c.last_name }}</td>
             <td>{{ c.gen.gender }}</td>
             <td>{{ c.dob.strftime('%m-%d-%Y') }}</td>
-            <td>{{ adder.add(id=c.id) }}</td>
+            <td><button class="addBtn" type ="button">Add</button></td>
         </tr>
         {% endfor%}
     </table>
-    {% endif %}
-    </form>
     {% endif %}
 {% endblock %}
