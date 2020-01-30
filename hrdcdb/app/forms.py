@@ -279,3 +279,22 @@ class CreateService(FlaskForm):
 							  end_date = self.end_date.data)
 		db.session.add(new_service)
 		db.session.commit()
+
+
+class CreateFamily(FlaskForm):
+	form_title = 'Create Family'
+
+	program_choices = [(p.id, p.name) for p in Program.query.all()]
+
+	client_id = IntegerField('ClientID')
+	created_by = IntegerField('UserID')
+	program = SelectField('Program', choices = program_choices, coerce = int)
+	first_name = StringField('First Name')
+	middle_name = StringField('Middle Name')
+	last_name = StringField('Last Name')
+	dob = DateField('Date of Birth', format='%Y-%m-%d', validators=[Optional()])
+	SSN = StringField('Social Security #')
+
+	exact_match = BooleanField('Require Exact Match')
+	submit = SubmitField('Find Client')
+	add = SubmitField('Add to Family')

@@ -281,3 +281,13 @@ def add_assessment(clientid):
 		form.execute_transaction()
 		return redirect(url_for('client_dashboard', clientid = clientid))
 	return render_template('add_om_score.html', form = form, cid = clientid)
+
+
+@app.route('/create_family_<clientid>', methods = ['GET','POST'])
+def create_family(clientid):
+	prefill = {'client_id':clientid,'created_by':current_user.id}
+	form = CreateFamily(data = prefill)
+	if form.validate_on_submit():
+		form.execute_transaction()
+		return redirect(url_for('client_dashboard', clientid = clientid))
+	return render_template('create_family.html', form = form, cid = clientid)

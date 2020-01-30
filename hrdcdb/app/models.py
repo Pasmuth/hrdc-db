@@ -79,6 +79,28 @@ class Client(db.Model):
 		return '<{} {}>'.format(self.first_name,self.last_name)
 
 
+class Family(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	program_id = db.Column(db.Integer, db.ForeignKey('program.id'))
+	created_date = db.Column(db.DateTime, index = True, default = datetime.utcnow)
+	created_by = db.Column(db.Integer, db.ForeignKey('user.id'))
+	case_note = db.Column(db.String(300))
+
+	user = db.relationship('User', uselist = False)
+	program = db.relationship('Program', uselist = False)
+	family_member = db.relationship('FamilyMember', back_populates='family')
+
+
+class FamilyMember(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	family_id = db.Column(db.Integer, db.ForeignKey('family.id'))
+	client_id = db.Column(db.Integer, db.ForeignKey('client.id'))
+	head_of_household = db.Column(db.Boolean)
+
+	family = db.relationship('Family', back_populates='family_member')
+	client = db.relationship('Client', uselist = False)
+
+
 class ClientRelationship(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
 	client_a_id = db.Column(db.Integer, db.ForeignKey('client.id'))
@@ -175,6 +197,7 @@ class ClientRace(db.Model):
 class ServiceType(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
 	name = db.Column(db.String(50))
+	units = db.Column(db.String(20))
 
 	def __repr__(self):
 		return '<ServiceType {}>'.format(self.name)
@@ -192,11 +215,16 @@ class Service(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
 	service_type_id = db.Column(db.Integer, db.ForeignKey('service_type.id'))
 	client_id = db.Column(db.Integer, db.ForeignKey('client.id'))
+	family_id = db.Column(db.Integer, db.ForeignKey('family.id'))
 	program_id = db.Column(db.Integer, db.ForeignKey('program.id'))
 	created_by = db.Column(db.Integer, db.ForeignKey('user.id'))
 	created_date = db.Column(db.DateTime, index = True, default = datetime.utcnow)
 	begin_date = db.Column(db.DateTime)
 	end_date = db.Column(db.DateTime)
+	is_family = db.Column(db.Boolean)
+	quantity = db.Column(db.Integer)
+
+	family = db.relationship('Family', uselist = False)
 	program = db.relationship('Program', uselist = False)
 	user = db.relationship('User', uselist = False)
 	service_type = db.relationship('ServiceType', uselist = False)

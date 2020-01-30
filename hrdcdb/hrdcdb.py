@@ -25,4 +25,6 @@ def make_shell_context():
 			'OutcomeDomainLevels':OutcomeDomainLevels,
 			'HousingAssessment':HousingAssessment,
 			'HousingStatus':HousingStatus,
-			'AssessmentType':AssessmentType}
+			'AssessmentType':AssessmentType,
+			'Family':Family,
+			'FamilyMember':FamilyMember}

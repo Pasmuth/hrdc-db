@@ -20,8 +20,8 @@ relationships = ['Spouse/Partner','Parent',
 
 programs = ['Housing','Energy','Food Bank','Galavan']
 
-service_types = ['Case Management','Intake','Food Box','Emergency Shelter',
-				 'Energy Assistance','Weatherization','Medical Ride','Social Ride']
+service_types = [['Case Management','Hours'],['Intake', None],['Food Box','People'],['Emergency Shelter', None],
+				 ['Energy Assistance','Dollars'],['Weatherization','Hours'],['Medical Ride', None],['Social Ride', None]]
 
 assess_types = ['Outcome Matrix','Housing']
 
@@ -129,7 +129,7 @@ for r in relationships:
 	db.session.add(cur)
 
 for s in service_types:
-	cur = ServiceType(name = s)
+	cur = ServiceType(name = s[0], units = s[1])
 	db.session.add(cur)
 
 for p in programs:
