@@ -1,6 +1,6 @@
 import pdfkit
 import os
-from flask import render_template, flash, redirect, url_for, request, jsonify, send_file, make_response
+from flask import render_template, flash, redirect, url_for, request, jsonify, send_file, make_response, json
 from werkzeug.urls import url_parse
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
@@ -288,6 +288,7 @@ def add_assessment(clientid):
 def create_family():
 	prefill = {'created_by':current_user.id}
 	form = CreateFamily(data = prefill)
+	# This if block handles the client search
 	if form.validate_on_submit():
 		clients = Client.query
 		if form.first_name.data:
@@ -295,13 +296,5 @@ def create_family():
 		if form.last_name.data:
 			clients = clients.filter(Client.last_name.like('%{}%'.format(form.last_name.data)))
 		return render_template('create_family.html', form = form, clients = clients.all())
-	elif request.method == 'GET':
-		if request.args.get('clientID'):
-			clientid = request.args.get('clientID')
-			client = Client.query.filter(Client.id == clientid).first()
-			# row = '<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>'.format(client.id,client.first_name,client.last_name,client.gen.gender,client.dob.strftime('%m-%d-%Y'))
-			return jsonify(result=client.id)
-		else:
-			return render_template('create_family.html', form = form)
 	return render_template('create_family.html', form = form)
 		
