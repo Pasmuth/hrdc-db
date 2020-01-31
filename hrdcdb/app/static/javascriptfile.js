@@ -49,18 +49,19 @@ window.onload=function(){
     $(".addBtn").on( "click", function() {
         var $row = jQuery(this).closest('tr');
         var $recordToAdd = $row.find('.clientID').text();
-        var $urlString = 'create_family'
+        console.log("clientid: " + $recordToAdd);
 
         $.ajax({
+            cache: false,
             url: 'create_family',
             type: 'GET',
             data: {'clientID': $recordToAdd,},
             success: function(response) {
-                $(".familyView").append("<tr><td id='col" + clientID + "'>"+ clientID +"</td></tr>")
+                $(".familyView tr:last").append('<tr>something</tr>')
                 console.log(response);
             },
             error: function(error){
-                console.log(error)
+                console.log(error);
             }
         })
     });

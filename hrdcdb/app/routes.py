@@ -299,8 +299,9 @@ def create_family():
 		if request.args.get('clientID'):
 			clientid = request.args.get('clientID')
 			client = Client.query.filter(Client.id == clientid).first()
-			return str(client.id)
+			# row = '<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>'.format(client.id,client.first_name,client.last_name,client.gen.gender,client.dob.strftime('%m-%d-%Y'))
+			return jsonify(result=client.id)
 		else:
-			print('error')
-	else:
-		return render_template('create_family.html', form = form)
+			return render_template('create_family.html', form = form)
+	return render_template('create_family.html', form = form)
+		
