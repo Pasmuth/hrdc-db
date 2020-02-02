@@ -19,7 +19,7 @@
                 {% endfor %}
             </div>
             <div class="formElement">
-                <input class="commit" type="button"></input>
+                <input class="commit" type="button" value="Create Family"></input>
             </div>
         </div>
 
@@ -32,6 +32,15 @@
                     <th>Gender</th>
                     <th>Date of Birth</th>
                 </tr>
+                {% if client %}
+                <tr>
+                    <td>{{ client.id }}</td>
+                    <td>{{ client.first_name }}</td>
+                    <td>{{ client.last_name }}</td>
+                    <td>{{ client.gen.gender }}</td>
+                    <td>{{ client.dob.strftime('%m-%d-%Y') }}</td>
+                </tr>
+                {% endif %}
             </tbody>
         </table>
 </form>
@@ -72,7 +81,7 @@
                 {% endfor %}
             </div>
             <div class="formElement">
-                <input class="searchBtn" type="button"></input>
+                <input class="famsearchBtn" type="button" value="Client Search"></input>
             </div>    
         </div>
         <form action="" method="post">
@@ -84,7 +93,7 @@
             <th>Last Name</th>
             <th>Gender</th>
             <th>Date of Birth</th>
-            <th>Add to Family</th>
+            <th> </th>
         </tr>
         </table>
     </div>

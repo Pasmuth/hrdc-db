@@ -1,44 +1,56 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <form action="" method="post">
-        {{ form.hidden_tag() }}
-        <div class="formFields">
-        {% for field in form %}
-            {% if field.type != 'CSRFTokenField' %}
+    <div class="formFields">
             <div class="formElement">
-                <strong>{{ field.label() }}:</strong>
-                {{ field() }} <br>
-                {% for error in field.errors %}
+                {{ form.first_name.label }}
+                {{ form.first_name(id = "first_name") }}
+                {% for error in form.first_name.errors %}
                 <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
             </div>
-            {% endif %}
-        {% endfor %}
+            <div class="formElement">
+                {{ form.middle_name.label }}
+                {{ form.middle_name(id = "middle_name") }}
+                {% for error in form.middle_name.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </div>
+            <div class="formElement">
+                {{ form.last_name.label }}
+                {{ form.last_name(id = "last_name") }}
+                {% for error in form.last_name.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </div>
+            <div class="formElement">
+                {{ form.dob.label }}
+                {{ form.dob(id = "dob") }}
+                {% for error in form.dob.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </div> 
+            <div class="formElement">
+                {{ form.SSN.label }}
+                {{ form.SSN(id = "SSN") }}
+                {% for error in form.SSN.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </div>
+            <div class="formElement">
+                <input class="searchBtn" type="button" value="Client Search"></input>
+            </div>    
         </div>
-    </form><br>
-    {% if clients %}
+    <div id="response">
         <table class="clientView">
         <tr>
             <th>Client ID</th>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Gender</th>
-            <th>Veteran Status</th>
-            <th>Created By</th>
-            <th>Go to Dashboard</th>
+            <th>Date of Birth</th>
+            <th> </th>
         </tr>
-        {% for c in clients %}
-        <tr>
-            <td>{{ c.id }}</td>
-            <td>{{ c.first_name }}</td>
-            <td>{{ c.last_name }}</td>
-            <td>{{ c.gen.gender }}</td>
-            <td>{{ c.veteran }}</td>
-            <td>{{ c.user.username }}</td>
-            <td><a href="{{ url_for('client_dashboard', clientid = c.id)}}">Dashboard</a></td>
-        </tr>
-        {% endfor%}
-    </table>
-    {% endif %}
+        </table>
+    </div>
 {% endblock %}

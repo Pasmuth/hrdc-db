@@ -1,6 +1,16 @@
 import pandas as pd
 from app import app, db
 from app.models import *
+import random
+import time
+from datetime import datetime
+
+def random_date(start, end, format, prop):
+    stime = time.mktime(time.strptime(start, format))
+    etime = time.mktime(time.strptime(end, format))
+    ptime = stime + prop * (etime - stime)
+    return datetime.strptime(time.strftime(format, time.localtime(ptime)),'%m/%d/%Y')
+
 
 
 race_list = ['White','Another Race','Black or African American','Asian',
@@ -22,6 +32,8 @@ programs = ['Housing','Energy','Food Bank','Galavan']
 
 service_types = [['Case Management','Hours'],['Intake', None],['Food Box','People'],['Emergency Shelter', None],
 				 ['Energy Assistance','Dollars'],['Weatherization','Hours'],['Medical Ride', None],['Social Ride', None]]
+
+program_service_types = [[1,1],[1,2],[1,4],[2,2],[2,5],[2,6],[3,2],[3,3],[4,1],[4,7],[4,8]]
 
 assess_types = ['Outcome Matrix','Housing']
 
@@ -98,14 +110,6 @@ HousingStatus.query.delete()
 HousingAssessment.query.delete()
 
 
-# Uncomment this section to drop all client data
-# Client.query.delete()
-# ClientRelationship.query.delete()
-# ClientAddress.query.delete()
-# ClientContact.query.delete()
-# ClientRace.query.delete()
-# Kiosk.query.delete()
-
 db.session.commit()
 
 for r in race_list:
@@ -136,6 +140,10 @@ for p in programs:
 	cur = Program(name = p)
 	db.session.add(cur)
 
+for pst in program_service_types:
+	cur = ProgramServiceType(program_id = pst[0], service_type_id = pst[1])
+	db.session.add(cur)
+
 for a in assess_types:
 	cur = AssessmentType(assess_type = a)
 	db.session.add(cur)
@@ -144,5 +152,33 @@ for hs in housing_statuses:
 	cur = HousingStatus(status = hs)
 	db.session.add(cur)
 
+
+db.session.commit()
+# Uncomment this section to drop all client data
+
+Client.query.delete()
+ClientRelationship.query.delete()
+ClientAddress.query.delete()
+ClientContact.query.delete()
+ClientRace.query.delete()
+Kiosk.query.delete()
+Family.query.delete()
+FamilyMember.query.delete()
+
+
+first_names = ['James', 'John', 'Peter', 'Emily', 'Charles', 'Jane', 'Thomas', 'William', 'Mary', 'Linda', 'Jenna', 'Jessica']
+last_names = ['Smith', 'Johnson', 'Williams','Brown','Jones','Miller','Davis','Wilson']
+
+for f in first_names:
+	for l in last_names:
+		dob = random_date('01/01/1970','01/01/2019','%m/%d/%Y',random.random())
+		eth = random.randint(1,3)
+		gender = random.randint(1,4)
+		race = random.randint(1,7)
+		new_client = Client(first_name = f, last_name = l, dob = dob, ethnicity = eth, gender = gender, created_by = 2)
+		db.session.add(new_client)
+		db.session.flush()
+		ncr = ClientRace(client_id = new_client.id, race_id = race, created_by = 2)
+		db.session.add(ncr)
 
 db.session.commit()

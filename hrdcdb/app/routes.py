@@ -1,6 +1,7 @@
 import sys
 import pdfkit
 import os
+import json
 from flask import render_template, flash, redirect, url_for, request, jsonify, send_file, make_response, json
 from werkzeug.urls import url_parse
 from flask_login import current_user, login_user, logout_user, login_required
@@ -111,8 +112,8 @@ def view_clients(client_data = None):
 	return render_template('search_results.html', title = 'Client Search', form = form)
 
 
-@app.route('/client_search', methods = ['GET','POST'])
-def client_search():
+@app.route('/family_client_search', methods = ['GET','POST'])
+def family_client_search():
 	first_name = request.args.get('first_name')
 	middle_name = request.args.get('middle_name')
 	last_name = request.args.get('last_name')
@@ -132,11 +133,36 @@ def client_search():
 	return jsonify({'data': render_template('ajax_search_results.html', clients = clients.all())})
 
 
-@app.route('/client_<clientid>_dashboard')
+@app.route('/client_search', methods = ['GET','POST'])
+def client_search():
+	first_name = request.args.get('first_name')
+	middle_name = request.args.get('middle_name')
+	last_name = request.args.get('last_name')
+	dob = request.args.get('dob')
+	SSN = request.args.get('SSN')
+
+	clients = Client.query
+	if first_name != '':
+		clients = clients.filter(Client.first_name.like('%{}%'.format(first_name)))
+	if middle_name != '':
+		clients = clients.filter(Client.middle_name.like('%{}%'.format(middle_name)))
+	if last_name != '':
+		clients = clients.filter(Client.last_name.like('%{}%'.format(last_name)))
+	if dob != '':
+		clients = clients.filter(Client.dob == dob)
+
+	return jsonify({'data': render_template('indiv_search_results.html', clients = clients.all())})
+
+
+@app.route('/client_<clientid>_dashboard', methods = ['GET','POST'])
 @login_required
 def client_dashboard(clientid):
 	client = Client.query.filter(Client.id == clientid).first()
 	relations = ClientRelationship.query.filter(ClientRelationship.client_a_id == clientid).all()
+	client_families = FamilyMember.query.filter(FamilyMember.client_id == clientid).all()
+	families = []
+	for f in client_families:
+		families.append(Family.query.filter(Family.id == f.family_id).first())
 
 	contact_info = ClientContact.query.filter(ClientContact.client_id == clientid).all()
 	services = Service.query.filter(Service.client_id == clientid).all()
@@ -148,7 +174,8 @@ def client_dashboard(clientid):
 	return render_template('client_dashboard.html', 
 							title = '{} {} Dashboard'.format(client.first_name, client.last_name),
 							client = client, relations = relations, contact_info = contact_info,
-							address = address, services = services, assessments = assessments)
+							address = address, services = services, assessments = assessments,
+							families = families)
 
 
 @app.route('/client_<clientid>_contact', methods = ['GET', 'POST'])
@@ -226,6 +253,7 @@ def edit_client(clientid):
 		client.gender = form.gender.data
 		client.ethnicity = form.ethnicity.data
 		db.session.commit()
+		return redirect(url_for('client_dashboard', clientid = clientid))
 	return render_template('form_view.html', form = form, cid = clientid)
 
 
@@ -254,6 +282,26 @@ def add_service(clientid):
 	return render_template('add_service.html', title = 'Add Service', form = form, data = services, cid = clientid)
 
 
+@app.route('/_get_service_types')
+def _get_service_types():
+	program = request.args.get('program_id')
+	service_types = ProgramServiceType.query.filter(ProgramServiceType.program_id == program).all()
+	program_service_types = [(pst.service_type.id, pst.service_type.name) for pst in service_types]
+	print(program_service_types, file = sys.stderr)
+	return json.dumps(dict(program_service_types))
+
+
+@app.route('/add_family_service_<familyid>', methods = ['GET','POST'])
+def add_family_service(familyid):
+	services = Service.query.filter(Service.family_id == familyid).all()
+	prefill = {'is_family': True, 'family_id':familyid,'created_by':current_user.id}
+	form = CreateService(data = prefill)
+	if form.validate_on_submit():
+		form.execute_transaction()
+		return redirect(url_for('add_family_service', familyid = familyid))
+	return render_template('add_service.html', title = 'Add Family Service', form = form, data = services, fid = familyid)
+
+
 @app.route('/client_checkin', methods = ['GET','POST'])
 def client_checkin():
 	checkin_to_db()
@@ -268,9 +316,18 @@ def universal_form(clientid):
 		address = ClientAddress.query.filter(ClientAddress.client_id == clientid).all()[-1]
 	except IndexError:
 		address = None
-	cell = ClientContact.query.filter(ClientContact.client_id == clientid).filter(ClientContact.contact_type == 3).first()
-	email = ClientContact.query.filter(ClientContact.client_id == clientid).filter(ClientContact.contact_type == 5).first()
-	work = ClientContact.query.filter(ClientContact.client_id == clientid).filter(ClientContact.contact_type == 1).first()
+	try:
+		cell = ClientContact.query.filter(ClientContact.client_id == clientid).filter(ClientContact.contact_type == 3).first()
+	except:
+		cell = None
+	try:
+		email = ClientContact.query.filter(ClientContact.client_id == clientid).filter(ClientContact.contact_type == 5).first()
+	except:
+		email = None
+	try:
+		work = ClientContact.query.filter(ClientContact.client_id == clientid).filter(ClientContact.contact_type == 1).first()
+	except:
+		work = None
 	rendered_form = render_template('universal_form.html', 
 						   client = client, address = address,
 						   cell = cell, email = email, work = work)
@@ -305,13 +362,15 @@ def add_assessment(clientid):
 	return render_template('add_om_score.html', form = form, cid = clientid)
 
 
-
+@app.route('/create_family_<clientid>', defaults = {'clientid':None}, methods = ['GET','POST'])
 @app.route('/create_family', methods = ['GET','POST'])
-def create_family():
+def create_family(clientid = None):
+	client = Client.query.filter(Client.id == clientid).first()
 	prefill = {'created_by':current_user.id}
 	form = CreateFamily(data = prefill)
 	if (request.method == 'GET') and request.args.get('client_ids'):
 		ids = request.args.get('client_ids').split(',')
+		print('ids: {}'.format(ids), file = sys.stderr)
 		program = request.args.get('program')
 		if len(ids) != 0:
 			new_family = Family(program_id = program, 
@@ -326,5 +385,14 @@ def create_family():
 			data = {'message': 'Family {} created at {}'.format(fam_id, new_family.created_date), 'code':'SUCCESS'}
 			db.session.commit()
 			return make_response(jsonify(data), 201)
-	return render_template('create_family.html', form = form)
+		elif len(ids) == 0:
+			print('this is an error', file = sys.stderr)
+			data = {'message': 'Cannot create a family with no members', 'code':'ERROR'}
+			return make_response(jsonify(data), 401)
+	return render_template('create_family.html', form = form, client = client)
 		
+
+@app.route('/family_<familyid>_dashboard', methods = ['GET'])
+def family_dashboard(familyid):
+	family_members = FamilyMember.query.filter(FamilyMember.family_id == familyid).all()
+	return render_template('family_dashboard.html', family_members = family_members, fid = familyid)

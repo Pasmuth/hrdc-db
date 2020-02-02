@@ -5,6 +5,6 @@
     <td>{{ c.last_name }}</td>
     <td>{{ c.gen.gender }}</td>
     <td>{{ c.dob.strftime('%m-%d-%Y') }}</td>
-    <td><input class="addBtn" type="button" value="Add to Family"></input></td>
+    <td><a href="{{ url_for('client_dashboard', clientid = c.id) }}"><button>Dashboard</button></a></td>
 </tr>
 {% endfor%}

@@ -48,7 +48,11 @@ window.onload=function(){
     $(document).on("click", ".addBtn", function() {
         var tr = $(this).closest('tr').clone();
         tr.find("input").attr("class", "rmBtn");
+        tr.find("input").attr("value", "Remove from Family");
         $(".familyView").append(tr);
+    });
+    $(document).on("click", ".rmBtn", function() {
+        var tr = $(this).closest('tr').remove();
     });
     $(".searchBtn").on("click", function() {
         var $first_name = $("#first_name").val()
@@ -64,7 +68,29 @@ window.onload=function(){
                 data: data,
                 success: function(response) {
                     $('div#response tr:gt(0)').hide();
-                    $('div#response table').append(response.data);
+                    $('div#response table.clientView').append(response.data);
+                    console.log(response);
+                },
+                error: function(error){
+                    console.log(error);
+                                    }
+            });
+    });
+    $(".famsearchBtn").on("click", function() {
+        var $first_name = $("#first_name").val()
+        var $middle_name = $("#middle_name").val()
+        var $last_name = $("#last_name").val()
+        var $dob = $("#dob").val()
+        var $SSN = $("#SSN").val()
+        var data = "first_name="+$first_name+"&middle_name="+$middle_name+"&last_name="+$last_name+"&dob="+$dob+"&SSN="+$SSN
+
+        $.ajax({
+                url: '/family_client_search',
+                type: 'GET',
+                data: data,
+                success: function(response) {
+                    $('div#response tr:gt(0)').hide();
+                    $('div#response table.clientView').append(response.data);
                     console.log(response);
                 },
                 error: function(error){
@@ -99,8 +125,34 @@ window.onload=function(){
                 },
                 error: function(error){
                     // Useful error message
+                    alert(response.message);
                     console.log(error);
                 }
             });
+    });
+    $(document).on('change', '#program', function(){
+        var program = $("#program").val();
+
+        var data = {'program_id':program};
+
+        $.ajax({
+            url: '/_get_service_types',
+            type: 'GET',
+            dataType: 'json',
+            contentType: 'application/json',
+            data : data,
+            success: function(response){
+                //populate the service type dropdown
+                var st = $("#service_type");
+                st.empty();
+                $.each(response, function(value,key){
+                    st.append($("<option></option>").attr('value', value).text(key));
+                });
+                console.log(response);
+            },
+            error: function(error){
+                console.log(error);
+            }
+        });
     });
 };
