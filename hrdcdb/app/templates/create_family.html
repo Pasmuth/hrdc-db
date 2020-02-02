@@ -13,10 +13,13 @@
             </div>
             <div class="formElement">
                 {{ form.program.label }}
-                {{ form.program }}
+                {{ form.program(class = 'program') }}
                 {% for error in form.program.errors %}
                 <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
+            </div>
+            <div class="formElement">
+                <input class="commit" type="button"></input>
             </div>
         </div>
 
@@ -31,50 +34,49 @@
                 </tr>
             </tbody>
         </table>
-
-
+</form>
         <div class="formFields">
             <div class="formElement">
                 {{ form.first_name.label }}
-                {{ form.first_name }}
+                {{ form.first_name(id = "first_name") }}
                 {% for error in form.first_name.errors %}
                 <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
             </div>
             <div class="formElement">
                 {{ form.middle_name.label }}
-                {{ form.middle_name }}
+                {{ form.middle_name(id = "middle_name") }}
                 {% for error in form.middle_name.errors %}
                 <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
             </div>
             <div class="formElement">
                 {{ form.last_name.label }}
-                {{ form.last_name }}
+                {{ form.last_name(id = "last_name") }}
                 {% for error in form.last_name.errors %}
                 <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
             </div>
             <div class="formElement">
                 {{ form.dob.label }}
-                {{ form.dob }}
+                {{ form.dob(id = "dob") }}
                 {% for error in form.dob.errors %}
                 <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
             </div> 
             <div class="formElement">
                 {{ form.SSN.label }}
-                {{ form.SSN }}
+                {{ form.SSN(id = "SSN") }}
                 {% for error in form.SSN.errors %}
                 <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
             </div>
             <div class="formElement">
-                {{ form.submit }}
+                <input class="searchBtn" type="button"></input>
             </div>    
         </div>
-    <form action="" method="post"><br>
-    {% if clients %}
+        <form action="" method="post">
+    <div id="response">
         <table class="clientView">
         <tr>
             <th>Client ID</th>
@@ -82,18 +84,10 @@
             <th>Last Name</th>
             <th>Gender</th>
             <th>Date of Birth</th>
+            <th>Add to Family</th>
         </tr>
-        {% for c in clients %}
-        <tr>
-            <td class="clientID">{{ c.id }}</td>
-            <td>{{ c.first_name }}</td>
-            <td>{{ c.last_name }}</td>
-            <td>{{ c.gen.gender }}</td>
-            <td>{{ c.dob.strftime('%m-%d-%Y') }}</td>
-            <td><input class="addBtn" type="button"></input></td>
-        </tr>
-        {% endfor%}
-    </table>
-    </form>
-    {% endif %}
+        </table>
+    </div>
+</form>
+
 {% endblock %}

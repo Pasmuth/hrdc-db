@@ -1,3 +1,4 @@
+import sys
 import pdfkit
 import os
 from flask import render_template, flash, redirect, url_for, request, jsonify, send_file, make_response, json
@@ -108,6 +109,27 @@ def view_clients(client_data = None):
 			clients = clients.filter(Client.last_name.like('%{}%'.format(form.last_name.data)))
 		return render_template('search_results.html', title = 'Search Results', form = form, clients = clients)
 	return render_template('search_results.html', title = 'Client Search', form = form)
+
+
+@app.route('/client_search', methods = ['GET','POST'])
+def client_search():
+	first_name = request.args.get('first_name')
+	middle_name = request.args.get('middle_name')
+	last_name = request.args.get('last_name')
+	dob = request.args.get('dob')
+	SSN = request.args.get('SSN')
+
+	clients = Client.query
+	if first_name != '':
+		clients = clients.filter(Client.first_name.like('%{}%'.format(first_name)))
+	if middle_name != '':
+		clients = clients.filter(Client.middle_name.like('%{}%'.format(middle_name)))
+	if last_name != '':
+		clients = clients.filter(Client.last_name.like('%{}%'.format(last_name)))
+	if dob != '':
+		clients = clients.filter(Client.dob == dob)
+
+	return jsonify({'data': render_template('ajax_search_results.html', clients = clients.all())})
 
 
 @app.route('/client_<clientid>_dashboard')
@@ -288,13 +310,21 @@ def add_assessment(clientid):
 def create_family():
 	prefill = {'created_by':current_user.id}
 	form = CreateFamily(data = prefill)
-	# This if block handles the client search
-	if form.validate_on_submit():
-		clients = Client.query
-		if form.first_name.data:
-			clients = clients.filter(Client.first_name.like('%{}%'.format(form.first_name.data)))
-		if form.last_name.data:
-			clients = clients.filter(Client.last_name.like('%{}%'.format(form.last_name.data)))
-		return render_template('create_family.html', form = form, clients = clients.all())
+	if (request.method == 'GET') and request.args.get('client_ids'):
+		ids = request.args.get('client_ids').split(',')
+		program = request.args.get('program')
+		if len(ids) != 0:
+			new_family = Family(program_id = program, 
+							    created_date = datetime.utcnow(), 
+							    created_by = current_user.id)
+			db.session.add(new_family)
+			db.session.flush()
+			fam_id = new_family.id
+			for cid in ids:
+				new_mem = FamilyMember(family_id = fam_id, client_id = cid)
+				db.session.add(new_mem)
+			data = {'message': 'Family {} created at {}'.format(fam_id, new_family.created_date), 'code':'SUCCESS'}
+			db.session.commit()
+			return make_response(jsonify(data), 201)
 	return render_template('create_family.html', form = form)
 		

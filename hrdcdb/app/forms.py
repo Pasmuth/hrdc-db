@@ -296,6 +296,6 @@ class CreateFamily(FlaskForm):
 	HoH = BooleanField('Head of Household')
 
 	exact_match = BooleanField('Require Exact Match')
-	submit = SubmitField('Find Client')
+	submit = SubmitField('Create Family')
 	add = SubmitField('Add to Family')
 	remove = SubmitField('Remove')

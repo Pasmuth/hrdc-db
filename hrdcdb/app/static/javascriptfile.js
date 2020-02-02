@@ -45,8 +45,62 @@ window.onload=function(){
             console.log("user concelled");
         }
     });
-    $(".addBtn").on("click", function() {
+    $(document).on("click", ".addBtn", function() {
         var tr = $(this).closest('tr').clone();
+        tr.find("input").attr("class", "rmBtn");
         $(".familyView").append(tr);
+    });
+    $(".searchBtn").on("click", function() {
+        var $first_name = $("#first_name").val()
+        var $middle_name = $("#middle_name").val()
+        var $last_name = $("#last_name").val()
+        var $dob = $("#dob").val()
+        var $SSN = $("#SSN").val()
+        var data = "first_name="+$first_name+"&middle_name="+$middle_name+"&last_name="+$last_name+"&dob="+$dob+"&SSN="+$SSN
+
+        $.ajax({
+                url: '/client_search',
+                type: 'GET',
+                data: data,
+                success: function(response) {
+                    $('div#response tr:gt(0)').hide();
+                    $('div#response table').append(response.data);
+                    console.log(response);
+                },
+                error: function(error){
+                    console.log(error);
+                                    }
+            });
+    });
+    $(".commit").on("click", function() {
+        
+
+        var program = $(".program").val()
+        // data needs to be a list of client ids
+        client_ids = []
+        $(".familyView .cid").each(function() {
+            client_ids.push( $(this).text());
+        });
+        var ids = client_ids.join(',');
+
+        var result = {"client_ids":ids,"program":program}
+
+        $.ajax({
+                url: '/create_family',
+                type: 'GET',
+                dataType : 'json',
+                contentType: 'application/json',
+                data: result,
+                success: function(response) {
+                    // message that says successful transaction?
+                    $('table.familyView tr:gt(0)').remove();
+                    alert(response.message);
+                    console.log(response);
+                },
+                error: function(error){
+                    // Useful error message
+                    console.log(error);
+                }
+            });
     });
 };
