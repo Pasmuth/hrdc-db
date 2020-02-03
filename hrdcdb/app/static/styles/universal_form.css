@@ -3,6 +3,7 @@ body{
 	height:29.7cm;
 	margin: 30mm 45mm 30mm 45mm;
 	background-color: #ffffff
+    text-align: center;
 }
 
 .formLabel{
@@ -14,9 +15,10 @@ body{
     font-size: 16px;
     cursor: pointer;
     font-weight: bold;
+    flex: 1;
 }
 
-.formLabel .name{
+.formLabel {
     padding: 15px 10px 15px 10px;
     background: #EEEEEE;
     margin: 1em 0;
@@ -25,7 +27,6 @@ body{
     font-size: 16px;
     cursor: pointer;
     font-weight: bold;
-    flex-grow:2;
 }
 
 .formHeader{
@@ -38,7 +39,55 @@ body{
     width: 100%
 }
 
-.formInfo{
+.formInfoname{
+    padding: 15px 32px;
+    background: #ccEEEE;
+    margin: 1em 0;
+    display: inline-block;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    flex: 1;
+    width: 19%;
+}
+
+.formInfoDemog{
+    padding: 15px 32px;
+    background: #ccEEEE;
+    margin: 1em 0;
+    display: inline-block;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    flex: 1;
+    width: 12%;
+}
+
+.address{
+    padding: 15px 32px;
+    background: #ccEEEE;
+    margin: 1em 0;
+    display: inline-block;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    flex: 1;
+    width: 29%;
+}
+
+.city{
+    padding: 15px 32px;
+    background: #ccEEEE;
+    margin: 1em 0;
+    display: inline-block;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    flex: 1;
+    width: 16%;
+}
+
+.middleName{
     padding: 15px 32px;
     background: #ccEEEE;
     margin: 1em 0;
@@ -47,9 +96,11 @@ body{
     font-size: 16px;
     flex-grow: 1.5;
     cursor: pointer;
+    flex: 1;
+    width: 5%;
 }
 
-.formInfo .zip{
+.formInfo{
     padding: 15px 32px;
     background: #ccEEEE;
     margin: 1em 0;
@@ -69,4 +120,39 @@ body{
   justify-content: flex-start;
   margin: 1em 0;
   border-width: 1px;
+}
+
+.nameBlock{
+  width: 100%;
+  float: center;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-between;
+  justify-content: flex-start;
+  margin: 1em 0;
+  border-width: 1px;
+}
+
+.checkbox {
+  width:20px;
+  height:20px;
+  border: 1px solid #000;
+  display: inline-block;
+}
+
+/* This is what simulates a checkmark icon */
+.checkbox.checked:after {
+  content: '';
+  display: block;
+  width: 4px;
+  height: 7px;
+  
+  /* "Center" the checkmark */
+  position:relative;
+  top:4px;
+  left:7px;
+  
+  border: solid #000;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
 }

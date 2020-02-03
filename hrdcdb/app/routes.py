@@ -94,7 +94,7 @@ def render_form(form):
 	return render_template('form_view.html', title = instance.form_title, form = instance)
 
 
-@app.route('/find_clients_<client_data>', defaults = {'client_data':None}, methods = ['GET','POST'])
+@app.route('/find_clients_', defaults = {'client_data':None}, methods = ['GET','POST'])
 @app.route('/find_clients_<client_data>', methods = ['GET', 'POST'])
 @login_required
 def view_clients(client_data = None):
@@ -349,7 +349,7 @@ def universal_form(clientid):
 		work = ClientContact.query.filter(ClientContact.client_id == clientid).filter(ClientContact.contact_type == 1).first()
 	except:
 		work = None
-	rendered_form = render_template('universal_form.html', 
+	rendered_form = render_template('universal_form_with_tables.html', 
 						   client = client, address = address,
 						   cell = cell, email = email, work = work)
 	path = os.path.dirname(os.path.realpath(__file__))
@@ -383,10 +383,8 @@ def add_assessment(clientid):
 	return render_template('add_om_score.html', form = form, cid = clientid)
 
 
-@app.route('/create_family_<clientid>', defaults = {'clientid':None}, methods = ['GET','POST'])
 @app.route('/create_family', methods = ['GET','POST'])
-def create_family(clientid = None):
-	client = Client.query.filter(Client.id == clientid).first()
+def create_family():
 	prefill = {'created_by':current_user.id}
 	form = CreateFamily(data = prefill)
 	if (request.method == 'GET') and request.args.get('client_ids'):
@@ -410,7 +408,7 @@ def create_family(clientid = None):
 			print('this is an error', file = sys.stderr)
 			data = {'message': 'Cannot create a family with no members', 'code':'ERROR'}
 			return make_response(jsonify(data), 401)
-	return render_template('create_family.html', form = form, client = client)
+	return render_template('create_family.html', form = form)
 		
 
 @app.route('/family_<familyid>_dashboard', methods = ['GET'])

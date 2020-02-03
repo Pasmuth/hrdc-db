@@ -10,7 +10,11 @@
             <table class="clientView">
                 <tr>
                     <td>Client Name</td> 
+                    {% if client.middle_name != None %}
                     <td>{{ client.first_name }} {{ client.middle_name }} {{ client.last_name }}</td>
+                    {% else %}
+                    <td>{{ client.first_name }} {{ client.last_name }}</td>
+                    {% endif %}
                 </tr>
                 <tr>
                     <td>Date of Birth</td>
