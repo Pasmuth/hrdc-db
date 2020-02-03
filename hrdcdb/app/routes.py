@@ -144,11 +144,11 @@ def client_search():
 
 	clients = Client.query
 	if first_name != '':
-		clients = clients.filter(Client.first_name.like('%{}%'.format(first_name)))
+		clients = clients.filter(Client.first_name.like('{}%'.format(first_name)))
 	if middle_name != '':
-		clients = clients.filter(Client.middle_name.like('%{}%'.format(middle_name)))
+		clients = clients.filter(Client.middle_name.like('{}%'.format(middle_name)))
 	if last_name != '':
-		clients = clients.filter(Client.last_name.like('%{}%'.format(last_name)))
+		clients = clients.filter(Client.last_name.like('{}%'.format(last_name)))
 	if dob != '':
 		clients = clients.filter(Client.dob == dob)
 
@@ -280,43 +280,26 @@ def add_service(clientid):
 	if form.validate_on_submit():
 		form.execute_transaction()
 		return redirect(url_for('add_service', clientid = clientid))
-	#return render_template('add_service.html', title = 'Add Service', form = form, data = services, cid = clientid)
-
 	elif request.method == 'GET':
-
 		# check for request parameters
 		if request.args.get('recordID'):
-
 			#get the recorde id that needs to be deletedf
 			recordID = request.args.get('recordID')
-
 			# update database
-			recordToDel = Service.query.filter(Service.id == recordID).all()
-
-			#print("client id: ", type(str(recordToDel[0].client_id)))
-			#print("other client id: ", type(clientid))
-			#print(clientid == str(recordToDel[0].client_id))
-			#print("len: ", len(recordToDel))
-
+			recordToDel = Service.query.filter(Service.id == recordID).first()
 			# do some validation
-			if (len(recordToDel) == 1 and str(recordToDel[0].client_id) == clientid):
-				db.session.delete(recordToDel[0])
+			if str(recordToDel.client_id) == clientid:
+				db.session.delete(recordToDel)
 				db.session.commit()
-
-				#print("len: ", len(recordToDel))
-				#print("record: ", recordToDel[0].id)
 				return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
-
 			else:
-				#print("somethings wrong with query")
 				return json.dumps({'error': True}), 404, {'ContentType': 'application/json'}
 		# if no parameters are present, its just a regular get
 		else:
 			return render_template('add_service.html', title = 'Add Service', form = form, data = services)
-
 	# if the submit and validate fails
 	else:
-		return render_template('add_service.html', title='Add Service', form=form, data=services)
+		return render_template('add_service.html', title='Add Service', form=form, data=services, cid = clientid)
 
 
 

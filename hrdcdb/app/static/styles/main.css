@@ -7,7 +7,6 @@ body {
   background: #e6ffe6 ;
 }
 
-/*colors = ['#147278','#98c23d','#003e52']*/
 
 table {
   font-family: arial, sans-serif;
@@ -19,7 +18,7 @@ table.clientView {
   border-collapse: collapse;
   align: center;
   width: 90%;
-  background-color: #d9b38c
+  background-color: #cccccc
 }
 
 table.familyView {
@@ -27,7 +26,7 @@ table.familyView {
   border-collapse: collapse;
   align: center;
   width: 90%;
-  background-color: #d9b38c
+  background-color: #cccccc
 }
 
 td {
@@ -51,7 +50,8 @@ th {
 
 .formElement{
     padding: 15px 32px;
-    background: #EEEEEE;
+    color: white;
+    background: #8c8c8c;
     margin: 1em 0;
     display: inline-block;
     text-align: center;
@@ -74,7 +74,7 @@ th {
 
 .dash_button{
     padding: 15px 32px;
-    background-color: #4d3900;
+    background-color: #147278;
     margin: 1em 0;
     display: inline-block;
     text-align: center;
@@ -90,7 +90,7 @@ th {
   flex-wrap: wrap;
   align-content: space-around;
   justify-content: space-evenly;
-  background: #dfbf9f;
+  background: #cccccc;
   margin: 1em 0;
   box-shadow: 1px 2px 3px rgba(0,0,0,.5);
   border-radius: 5px;
@@ -102,7 +102,7 @@ th {
   flex-wrap: wrap;
   align-content: space-around;
   justify-content: space-evenly;
-  background: #0a290a;
+  background: #333;
   margin: 1em 0;
   box-shadow: 1px 2px 3px rgba(0,0,0,.5);
   border-radius: 5px;
@@ -113,7 +113,7 @@ th {
   flex-wrap: wrap;
   align-content: space-around;
   justify-content: space-evenly;
-  background: #6EACE7;
+  background: #cccccc;
   margin: 1em 0;
   box-shadow: 1px 2px 3px rgba(0,0,0,.5);
   border-radius: 5px;
@@ -125,7 +125,7 @@ th {
   flex-wrap: wrap;
   align-content: space-around;
   justify-content: space-evenly;
-  background: #6EACE7;
+  background: #cccccc;
   margin: 1em 0;
   box-shadow: 1px 2px 3px rgba(0,0,0,.5);
   border-radius: 5px;
@@ -138,7 +138,7 @@ th {
   flex-wrap: wrap;
   align-content: space-around;
   justify-content: space-evenly;
-  background: #6EACE7;
+  background: #cccccc;
   margin: 1em 0;
   box-shadow: 1px 2px 3px rgba(0,0,0,.5);
   border-radius: 5px;
@@ -150,23 +150,10 @@ th {
   flex-wrap: wrap;
   align-content: space-around;
   justify-content: space-evenly;
-  background: #6EACE7;
+  background: #cccccc;
   margin: 1em 0;
   box-shadow: 1px 2px 3px rgba(0,0,0,.5);
   border-radius: 5px;
-}
-
-.leftColumn {
-  float: left;
-  width: 15%;
-  display: flex;
-  flex-wrap: wrap;
-  align-content: space-around 
-}
-
-.rightColumn{
-  float: right;
-  width: 80%;
 }
 
 
@@ -178,25 +165,7 @@ th {
 }
 
 
-
-.wigetContainer{
-  display: flex;
-  flex-wrap: wrap;
-  align-content: space-around;
-  justify-content: space-evenly;
-  background: #EEEEEE;
-  margin: 1em 0;
-  box-shadow: 1px 2px 3px rgba(0,0,0,.5);
-  border-radius: 5px;
-  width: 100%
-}
-
-.widget{
-  height: 50%;
-  widows: 50%;
-}
-
-.header_bar {
+/*.header_bar {
   float: top;
   width: 100%
   }
@@ -211,4 +180,44 @@ th {
     margin: .5em 0;
     box-shadow: 1px 2px 3px rgba(0,0,0,.5);
     border-radius: 5px;
+}*/
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+/* Change the link color to #111 (black) on hover */
+li a:hover {
+  background-color: #111;
+}
+
+.om {
+  background-color: #b3b3b3;
+}
+
+ul.om {
+  display: flex;
+  list-style: none;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+li.om {
+  flex-basis: 25%
 }
