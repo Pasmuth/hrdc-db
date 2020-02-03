@@ -3,7 +3,7 @@ import datetime
 from flask import redirect, url_for
 from flask_wtf import FlaskForm
 from wtforms.fields.html5 import DateField
-from wtforms import RadioField, IntegerField, StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SelectField, FieldList, FormField
+from wtforms import RadioField, IntegerField, StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SelectField, FieldList, FormField, HiddenField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Optional, Regexp
 from app.models import *
 from app import db
@@ -221,22 +221,22 @@ class OMAssessment(FlaskForm):
 	program = SelectField('Program Collecting Score', choices = program_choices, coerce = int)
 
 	hou_choices = [(odl.score, odl.score_description) for odl in OutcomeDomainLevels.query.filter_by(domain = 'housing').all()]
-	housing = RadioField('Housing Score', choices = hou_choices, coerce = int)
+	housing = RadioField('Housing Score', choices = hou_choices, coerce = int, validators=[Optional()])
 
 	tran_choices = [(odl.score, odl.score_description) for odl in OutcomeDomainLevels.query.filter_by(domain = 'transportation').all()]
-	transportation = RadioField('Transportation Score', choices = tran_choices, coerce = int)
+	transportation = RadioField('Transportation Score', choices = tran_choices, coerce = int, validators=[Optional()])
 
 	edu_choices = [(odl.score, odl.score_description) for odl in OutcomeDomainLevels.query.filter_by(domain = 'education').all()]
-	education = RadioField('Education Score', choices = edu_choices, coerce = int)
+	education = RadioField('Education Score', choices = edu_choices, coerce = int, validators=[Optional()])
 
 	emp_choices = [(odl.score, odl.score_description) for odl in OutcomeDomainLevels.query.filter_by(domain = 'employment').all()]
-	employment = RadioField('Employment Score', choices = emp_choices, coerce = int)
+	employment = RadioField('Employment Score', choices = emp_choices, coerce = int, validators=[Optional()])
 
 	cc_choices = [(odl.score, odl.score_description) for odl in OutcomeDomainLevels.query.filter_by(domain = 'childcare').all()]
-	childcare = RadioField('Childcare Score', choices = cc_choices, coerce = int)
+	childcare = RadioField('Childcare Score', choices = cc_choices, coerce = int, validators=[Optional()])
 
 	inc_choices = [(odl.score, odl.score_description) for odl in OutcomeDomainLevels.query.filter_by(domain = 'income').all()]
-	income = RadioField('Income Score', choices = inc_choices, coerce = int)
+	income = RadioField('Income Score', choices = inc_choices, coerce = int, validators=[Optional()])
 
 	submit = SubmitField('Complete Assessment')
 
@@ -262,10 +262,12 @@ class CreateService(FlaskForm):
 	program_choices = [(p.id, p.name) for p in Program.query.all()]
 	ServiceType_choices = [(st.id, st.name) for st in ServiceType.query.all()]
 
-	client_id = IntegerField('ClientID')
+	client_id = IntegerField('ClientID', validators=[Optional()])
+	is_family = HiddenField('Family Service')
+	family_id = IntegerField('FamilyID', validators=[Optional()])
 	created_by = IntegerField('UserID')
-	program = SelectField('Program', choices = program_choices, coerce = int)
-	service_type = SelectField('Service Type', choices = ServiceType_choices, coerce = int)
+	program = SelectField('Program', choices = program_choices, coerce = int, id = 'program')
+	service_type = SelectField('Service Type', choices = ServiceType_choices, coerce = int, id = 'service_type')
 	begin_date = DateField('Begin Date', format='%Y-%m-%d')
 	end_date = DateField('End Date', format='%Y-%m-%d')
 	submit = SubmitField('Add Service')
@@ -273,9 +275,30 @@ class CreateService(FlaskForm):
 	def execute_transaction(self):
 		new_service = Service(service_type_id = self.service_type.data,
 							  client_id = self.client_id.data,
+							  family_id = self.family_id.data,
 							  program_id = self.program.data,
 							  created_by = self.created_by.data,
 							  begin_date = self.begin_date.data,
 							  end_date = self.end_date.data)
 		db.session.add(new_service)
 		db.session.commit()
+
+
+class CreateFamily(FlaskForm):
+	form_title = 'Create Family'
+
+	program_choices = [(p.id, p.name) for p in Program.query.all()]
+
+	created_by = IntegerField('UserID')
+	program = SelectField('Program', choices = program_choices, coerce = int)
+	first_name = StringField('First Name')
+	middle_name = StringField('Middle Name')
+	last_name = StringField('Last Name')
+	dob = DateField('Date of Birth', format='%Y-%m-%d', validators=[Optional()])
+	SSN = StringField('Social Security #')
+	HoH = BooleanField('Head of Household')
+
+	exact_match = BooleanField('Require Exact Match')
+	submit = SubmitField('Create Family')
+	add = SubmitField('Add to Family')
+	remove = SubmitField('Remove')

@@ -22,7 +22,12 @@
 			<div class="formLabel">Date of Birth</div>
 			<div class="formInfo">{{ client.dob.strftime('%m/%d/%Y') }}</div>
 			<div class="formLabel">SSN (Last 4)</div>
-			<div class="formInfo">xxx-xx-{{ client.SSN[-4:] }}</div>
+			{% if SSN %}
+				<div class="formInfo">xxx-xx-{{ client.SSN[-4:] }}</div>
+			{% else %}
+				<div class="formInfo">xxx-xx-____</div>
+			{% endif %}
+
 		</div>
 
 		<div class="formBlock">

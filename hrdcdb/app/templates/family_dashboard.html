@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="dashboard_Fields">
+        <div class="formElement">
+            <a class="dash_button">Print Universal Form</a>
+            <p> In the future this could print out a HH comp table, or something like that</p>
+        </div>
+        <div class="formElement">
+            <h2>Family Members</h2>
+            <table class="clientView">
+                <tr>
+                    <th>Client ID</th>
+                    <th>Name</th>
+                    <th>Date of Birth</th>
+                </tr>
+            {% for fm in family_members %}
+                <tr>
+                    <td>{{ fm.client_id }}</td>
+                    <td>{{ fm.client.first_name }} {{ fm.client.last_name }}</td>
+                    <td>{{ fm.client.dob.strftime('%m-%d-%Y') }}</td>
+                </tr>
+            {% endfor %}
+        </div>
+            {% if address %}
+        <div class="formElement">
+            <h2>Address</h2>
+            <table class="clientView">
+                <tr>
+                    <td> Address </td>
+                    <td>{{ address.address }}</td>
+                </tr>
+                <tr>
+                    <td> </td>
+                    <td>{{ address.address_2 }}</td>
+                </tr>
+                <tr>
+                    <td> City </td>
+                    <td>{{ address.city }}</td>
+                </tr>
+                <tr>
+                    <td> State </td>
+                    <td>{{ address.state }}</td>
+                </tr>
+            </table>
+            
+        </div>
+            {% endif %}
+        
+            {% if contact_info %}
+        <div class="formElement">
+            <h2>Contact Information</h2>
+            <table class="clientView">
+                <tr>
+                    <th>Contact</th>
+                    <th>Type</th>
+                </tr>
+                {% for c in contact_info %}
+                <tr>
+                    <td>{{ c.contact }}</td>
+                    <td>{{ c.ContactType.contact_type }}</td>
+                </tr>
+                {% endfor%}
+            </table>
+            
+        </div>
+            {% endif %}
+        
+        <div class="formElement">
+            <h2>Services</h2>
+            <table class="clientView">
+            {% if services %}
+                <tr>
+                    <th>Program</th>
+                    <th>Service</th>
+                    <th>Date</th>
+                </tr>
+                {% for s in services %}
+                <tr>
+                    <td>{{ s.program.name }}</td>
+                    <td>{{ s.service_type.name }}</td>
+                    <td>{{ s.begin_date.strftime('%m-%d-%Y') }}</td>
+                </tr>
+                {% endfor%}
+            </table>
+            {% endif %}
+            <a href="{{ url_for('add_family_service', familyid = fid)}}" class="dash_button">Add Family Service</a>
+        </div>
+
+            {% if assessments %}
+        <div class="formElement">
+            <h2>Assessments</h2>
+            <table class="clientView">
+                <tr>
+                    <th>Program</th>
+                    <th>Assessment Type</th>
+                    <th>Date</th>
+                </tr>
+                {% for a in assessments %}
+                <tr>
+                    <td>{{ a.program.name }}</td>
+                    <td>{{ a.assess_type.assess_type }}</td>
+                    <td>{{ a.assessment_date.strftime('%m-%d-%Y') }}</td>
+                </tr>
+                {% endfor%}
+            </table>
+            
+        </div>
+            {% endif %}
+    </div>
+{% endblock %}

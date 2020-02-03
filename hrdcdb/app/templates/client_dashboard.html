@@ -1,22 +1,20 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="demogFields">
+    <div class="dashboard_Fields">
         <div class="formElement">
             <a href="{{ url_for('universal_form', clientid = client.id)}}" class="dash_button">Print Universal Form</a>
         </div>
-    </div>
-    <div class="formFields">
         <div class="formElement">
             <h2>Client Demographics</h2>
-            <table>
+            <table class="clientView">
                 <tr>
                     <td>Client Name</td> 
                     <td>{{ client.first_name }} {{ client.middle_name }} {{ client.last_name }}</td>
                 </tr>
                 <tr>
                     <td>Date of Birth</td>
-                    <td>{{ client.dob }}</td>
+                    <td>{{ client.dob.strftime('%m-%d-%Y') }}</td>
                 </tr>
                 <tr>
                     <td>Gender</td>
@@ -28,17 +26,21 @@
         <div class="formElement">
             <h2>Address</h2>
             {% if address %}
-            <table>
+            <table class="clientView">
                 <tr>
+                    <td> Address </td>
                     <td>{{ address.address }}</td>
                 </tr>
                 <tr>
+                    <td> </td>
                     <td>{{ address.address_2 }}</td>
                 </tr>
                 <tr>
+                    <td> City </td>
                     <td>{{ address.city }}</td>
                 </tr>
                 <tr>
+                    <td> State </td>
                     <td>{{ address.state }}</td>
                 </tr>
             </table>
@@ -46,14 +48,10 @@
             <a href="{{ url_for('add_address', clientid = client.id)}}" class="dash_button">Add Address</a>
         </div>
         
-    </div>
-
-
-    <div class="formFields">
         <div class="formElement">
             <h2>Contact Information</h2>
             {% if contact_info %}
-            <table class="contactInfo">
+            <table class="clientView">
                 <tr>
                     <th>Contact</th>
                     <th>Type</th>
@@ -68,9 +66,9 @@
             {% endif %}
             <a href="{{ url_for('create_contact', clientid = client.id)}}" class="dash_button">Edit Contact Information</a>
         </div>
+        {% if relations %}
         <div class="formElement">
-            <h2>Family Information</h2>
-            {% if relations %}
+            <h2>Relationships</h2>
             <table class="clientView">
                 <tr>
                     <th>Client A</th>
@@ -85,9 +83,33 @@
                 </tr>
                 {% endfor%}
             </table>
-            {% endif %}
-            <a href="{{ url_for('create_relationship', clientid = client.id)}}" class="button">Add Relationship</a>
-        </div>       
+            <a href="{{ url_for('create_relationship', clientid = client.id)}}" class="dash_button">Add Relationship</a>
+        </div>
+        {% endif %}
+        {% if families %}
+        <div class="formElement">       
+            <h2>Family Information</h2>
+            <table class="clientView">
+                <tr>
+                    <th>Family ID</th>
+                    <th>Created By (Program)</th>
+                    <th>Created By (User)</th>
+                    <th>Created Date</th>
+                    <th> </th>
+                </tr>
+                {% for f in families %}
+                <tr>
+                    <td>{{ f.id}}</td>
+                    <td>{{ f.program.name}}</td>
+                    <td>{{ f.user.username }}</td>
+                    <td>{{ f.created_date.strftime('%m-%d-%Y') }}</td>
+                    <td><a href="{{ url_for('family_dashboard', familyid = f.id) }}">Dashboard</a></td>
+                </tr>
+                {% endfor%}
+            </table>
+            <a href="{{ url_for('create_family', clientid = client.id)}}" class="dash_button">Create Family</a>
+        </div>  
+        {% endif %}
         <div class="formElement">
             <h2>Services</h2>
             {% if services %}
@@ -101,12 +123,12 @@
                 <tr>
                     <td>{{ s.program.name }}</td>
                     <td>{{ s.service_type.name }}</td>
-                    <td>{{ s.begin_date.strftime('%m/%d/%Y') }}</td>
+                    <td>{{ s.begin_date.strftime('%m-%d-%Y') }}</td>
                 </tr>
                 {% endfor%}
             </table>
             {% endif %}
-            <a href="{{ url_for('add_service', clientid = client.id)}}" class="button">Add new service</a>
+            <a href="{{ url_for('add_service', clientid = client.id)}}" class="dash_button">Add new service</a>
         </div>
         <div class="formElement">
             <h2>Assessments</h2>
@@ -121,12 +143,12 @@
                 <tr>
                     <td>{{ a.program.name }}</td>
                     <td>{{ a.assess_type.assess_type }}</td>
-                    <td>{{ a.assessment_date.strftime('%m/%d/%Y') }}</td>
+                    <td>{{ a.assessment_date.strftime('%m-%d-%Y') }}</td>
                 </tr>
                 {% endfor%}
             </table>
             {% endif %}
-            <a href="{{ url_for('add_assessment', clientid = client.id)}}" class="button">Add new assessment</a>
+            <a href="{{ url_for('add_assessment', clientid = client.id)}}" class="dash_button">Add new assessment</a>
         </div>
     </div>
 {% endblock %}
