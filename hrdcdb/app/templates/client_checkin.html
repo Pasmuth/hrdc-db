@@ -13,6 +13,7 @@
         <th>DOB</th>
         <th>Last 4 of SSN</th>
         <th>Search</th>
+        <th>Clear</th>
     </tr>
 
 {% for client in lobby %}
@@ -24,7 +25,8 @@
       <td>{{ client.last_name }}</td>
       <td>{{ client.dob.strftime('%m-%d-%Y') }}</td>
       <td>{{ client.SSN }}</td>
-      <td><a href="{{ url_for('view_clients', client_data = client.id) }}">Search</a></td>
+      <td><a href="{{ url_for('view_clients', clientid = client.id) }}"><button>Dashboard</button></a></td>
+      <td>Clear</td>
     </tr>
 {% endfor %}
 </table>

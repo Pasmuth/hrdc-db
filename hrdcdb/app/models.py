@@ -172,12 +172,6 @@ class Ethnicity(db.Model):
 		return '<Ethnicity {}>'.format(self.ethnicity)
 
 
-class Race(db.Model):
-	id = db.Column(db.Integer, primary_key = True)
-	race = db.Column(db.String(40))
-
-	def __repr__(self):
-		return '<Race {}>'.format(self.race)
 
 
 class ClientRace(db.Model):
@@ -190,6 +184,14 @@ class ClientRace(db.Model):
 	user = db.relationship('User', uselist = False)
 
 
+class Race(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	race = db.Column(db.String(40))
+
+	def __repr__(self):
+		return '<Race {}>'.format(self.race)
+
+		
 ####################################################################################
 # The Program and Service tables define how services are tracked across the agency #
 ####################################################################################
