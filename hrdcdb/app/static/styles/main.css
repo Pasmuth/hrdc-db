@@ -102,7 +102,7 @@ th {
   flex-wrap: wrap;
   align-content: space-around;
   justify-content: space-evenly;
-  background: #333;
+  background: #cccccc;
   margin: 1em 0;
   box-shadow: 1px 2px 3px rgba(0,0,0,.5);
   border-radius: 5px;

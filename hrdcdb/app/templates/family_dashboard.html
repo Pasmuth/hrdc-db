@@ -1,11 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="dashboard_Fields">
-        <div class="formElement">
-            <a class="dash_button">Print Universal Form</a>
-            <p> In the future this could print out a HH comp table, or something like that</p>
-        </div>
+    <div class="formFields">
         <div class="formElement">
             <h2>Family Members</h2>
             <table class="clientView">
@@ -19,12 +15,24 @@
                     <td>{{ fm.client_id }}</td>
                     <td>{{ fm.client.first_name }} {{ fm.client.last_name }}</td>
                     <td>{{ fm.client.dob.strftime('%m-%d-%Y') }}</td>
+                    <td><a href="{{ url_for('client_dashboard', clientid = fm.family_id) }}" class="dash_button">Dashboard</a></td>
                 </tr>
             {% endfor %}
+            </table>
         </div>
-            {% if address %}
+    </div>
+
+    <div class="dashboard_Fields">
+
+        <div class="formElement">
+            <a class="dash_button">Print Universal Form</a>
+        </div>
+
+        
+
         <div class="formElement">
             <h2>Address</h2>
+            {% if address %}
             <table class="clientView">
                 <tr>
                     <td> Address </td>
@@ -43,13 +51,12 @@
                     <td>{{ address.state }}</td>
                 </tr>
             </table>
-            
+            {% endif %}            
         </div>
-            {% endif %}
         
-            {% if contact_info %}
         <div class="formElement">
             <h2>Contact Information</h2>
+            {% if contact_info %}
             <table class="clientView">
                 <tr>
                     <th>Contact</th>
@@ -62,9 +69,8 @@
                 </tr>
                 {% endfor%}
             </table>
-            
-        </div>
             {% endif %}
+        </div>
         
         <div class="formElement">
             <h2>Services</h2>
@@ -87,9 +93,9 @@
             <a href="{{ url_for('add_family_service', familyid = fid)}}" class="dash_button">Add Family Service</a>
         </div>
 
-            {% if assessments %}
         <div class="formElement">
             <h2>Assessments</h2>
+            {% if assessments %}
             <table class="clientView">
                 <tr>
                     <th>Program</th>
@@ -104,8 +110,8 @@
                 </tr>
                 {% endfor%}
             </table>
-            
-        </div>
             {% endif %}
+        </div>
+
     </div>
 {% endblock %}

@@ -5,6 +5,7 @@
         <div class="formElement">
             <a href="{{ url_for('universal_form', clientid = client.id)}}" class="dash_button">Print Universal Form</a>
         </div>
+
         <div class="formElement">
             <h2>Client Demographics</h2>
             <table class="clientView">
@@ -23,6 +24,7 @@
             </table>
         <a href="{{ url_for('edit_client', clientid = client.id)}}" class="dash_button">Edit Client Demographics</a>
         </div>
+
         <div class="formElement">
             <h2>Address</h2>
             {% if address %}
@@ -66,27 +68,30 @@
             {% endif %}
             <a href="{{ url_for('create_contact', clientid = client.id)}}" class="dash_button">Edit Contact Information</a>
         </div>
-        {% if relations %}
+
         <div class="formElement">
+        {% if relations %}
             <h2>Relationships</h2>
             <table class="clientView">
                 <tr>
                     <th>Client A</th>
                     <th>Client B</th>
                     <th>Relationship</th>
+                    <th>Dashboard</th>
                 </tr>
                 {% for r in relations %}
                 <tr>
                     <td>{{ r.client_a.first_name }} {{ r.client_a.last_name }}</td>
                     <td>{{ r.client_b.first_name }} {{ r.client_b.last_name }}</td>
                     <td>{{ r.relationship.relationship }}</td>
+                    <td><a href="{{ url_for('client_dashboard', clientid = r.client_b.id) }}" class="dash_button">Dashboard</a></td>
                 </tr>
                 {% endfor%}
             </table>
+        {% endif %}
             <a href="{{ url_for('create_relationship', clientid = client.id)}}" class="dash_button">Add Relationship</a>
         </div>
-        {% endif %}
-        {% if families %}
+
         <div class="formElement">       
             <h2>Family Information</h2>
             <table class="clientView">
@@ -103,13 +108,13 @@
                     <td>{{ f.program.name}}</td>
                     <td>{{ f.user.username }}</td>
                     <td>{{ f.created_date.strftime('%m-%d-%Y') }}</td>
-                    <td><a href="{{ url_for('family_dashboard', familyid = f.id) }}">Dashboard</a></td>
+                    <td><a href="{{ url_for('family_dashboard', familyid = f.id) }}" class="dash_button">Dashboard</a></td>
                 </tr>
                 {% endfor%}
             </table>
             <a href="{{ url_for('create_family', clientid = client.id)}}" class="dash_button">Create Family</a>
-        </div>  
-        {% endif %}
+        </div>
+
         <div class="formElement">
             <h2>Services</h2>
             {% if services %}
@@ -130,6 +135,27 @@
             {% endif %}
             <a href="{{ url_for('add_service', clientid = client.id)}}" class="dash_button">Add new service</a>
         </div>
+
+        <div class="formElement">
+            <h2>Family Services</h2>
+            {% if fam_services %}
+            <table class="clientView">
+                <tr>
+                    <th>Program</th>
+                    <th>Service</th>
+                    <th>Date</th>
+                </tr>
+                {% for s in fam_services %}
+                <tr>
+                    <td>{{ s.program.name }}</td>
+                    <td>{{ s.service_type.name }}</td>
+                    <td>{{ s.begin_date.strftime('%m-%d-%Y') }}</td>
+                </tr>
+                {% endfor%}
+            </table>
+            {% endif %}
+        </div>
+
         <div class="formElement">
             <h2>Assessments</h2>
             {% if assessments %}

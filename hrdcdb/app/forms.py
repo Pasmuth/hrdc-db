@@ -83,7 +83,7 @@ class EditClient(FlaskForm):
 	dob = DateField('Date of Birth', format='%Y-%m-%d')
 
 	ssn_regex = '^(?!(000|666|9))\\d{3}-(?!00)\\d{2}-(?!0000)\\d{4}$'
-	SSN = StringField('Social Security #', validators = [Regexp(ssn_regex, message = 'Invalid Social Security Number')])
+	SSN = StringField('Social Security #', validators = [Optional(), Regexp(ssn_regex, message = 'Invalid Social Security Number')])
 	veteran = BooleanField('Veteran')
 	activeMilitary = BooleanField('Active Military')
 	disability = BooleanField('Disability')

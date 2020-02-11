@@ -167,6 +167,7 @@ def client_dashboard(clientid):
 
 	contact_info = ClientContact.query.filter(ClientContact.client_id == clientid).all()
 	services = Service.query.filter(Service.client_id == clientid).all()
+	fam_services = Service.query.filter(Service.family_id.in_(([f.family_id for f in client_families]))).all()
 	assessments = Assessment.query.filter(Assessment.client_id == clientid).all()
 	try:
 		address = ClientAddress.query.filter(ClientAddress.client_id == clientid).all()[-1]
@@ -176,7 +177,7 @@ def client_dashboard(clientid):
 							title = '{} {} Dashboard'.format(client.first_name, client.last_name),
 							client = client, relations = relations, contact_info = contact_info,
 							address = address, services = services, assessments = assessments,
-							families = families)
+							families = families, fam_services = fam_services)
 
 
 @app.route('/client_<clientid>_contact', methods = ['GET', 'POST'])
@@ -296,7 +297,7 @@ def add_service(clientid):
 				return json.dumps({'error': True}), 404, {'ContentType': 'application/json'}
 		# if no parameters are present, its just a regular get
 		else:
-			return render_template('add_service.html', title = 'Add Service', form = form, data = services)
+			return render_template('add_service.html', title = 'Add Service', form = form, data = services, cid = clientid)
 	# if the submit and validate fails
 	else:
 		return render_template('add_service.html', title='Add Service', form=form, data=services, cid = clientid)
@@ -320,7 +321,7 @@ def add_family_service(familyid):
 	if form.validate_on_submit():
 		form.execute_transaction()
 		return redirect(url_for('add_family_service', familyid = familyid))
-	return render_template('add_service.html', title = 'Add Family Service', form = form, data = services, fid = familyid)
+	return render_template('add_service.html', title = 'Add Family Service', form = form, services = services, familyid = familyid)
 
 
 @app.route('/client_checkin', methods = ['GET','POST'])

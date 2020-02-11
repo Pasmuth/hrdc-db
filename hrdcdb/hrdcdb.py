@@ -16,6 +16,7 @@ def make_shell_context():
 			'Ethnicity': Ethnicity,
 			'Race': Race,
 			'ClientRace': ClientRace,
+			'Service': Service,
 			'ServiceType': ServiceType,
 			'Program': Program,
 			'ProgramServiceType': ProgramServiceType,

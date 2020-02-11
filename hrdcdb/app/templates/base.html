@@ -19,6 +19,9 @@
             {% if cid %}
             <li ><a  href="{{ url_for('client_dashboard', clientid = cid) }}">Return to Dashboard</a></li>
             {% endif %}
+            {% if familyid %}
+            <li ><a  href="{{ url_for('family_dashboard', familyid = familyid) }}">Return to Dashboard</a></li>
+            {% endif %}
             <li ><a  href="{{ url_for('client_checkin') }}">Kiosk</a></li>
             <li ><a  href="{{ url_for('index') }}">Home</a></li>
             <li ><a  href="{{ url_for('create_client') }}">Create New Client</a></li>
