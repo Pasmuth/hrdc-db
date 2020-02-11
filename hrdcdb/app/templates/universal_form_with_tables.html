@@ -20,27 +20,30 @@
 
 		<div class="demogBlock">
 			<div class="formLabel">Date of Birth</div>
-			<div class="formInfo">{{ client.dob.strftime('%m/%d/%Y') }}</div>
+			<div class="formInfoDemog">{{ client.dob.strftime('%m/%d/%Y') }}</div>
 			<div class="formLabel">SSN (Last 4)</div>
 			{% if client.SSN != None %}
-				<div class="formInfo">xxx-xx-{{ client.SSN[-4:] }}</div>
+				<div class="formInfoDemog">xxx-xx-{{ client.SSN[-4:] }}</div>
 			{% else %}
-				<div class="formInfo">xxx-xx-____</div>
+				<div class="formInfoDemog">xxx-xx-_ _ _ _</div>
 			{% endif %}
-
+			<div class="formLabel">Gender</div>
+			<div class="formInfoDemog">{{ client.gen.gender }}</div>
 		</div>
 
 		<div class="addressBlock">
 			<div class="formLabel">Address</div>
-			<div class="formInfo">{{ address.address }}</div>
+			<div class="address">{{ address.address }}</div>
 			<div class="formLabel">Address Two</div>
-			<div class="formInfo">{{ address.address_2 }}</div>
+			<div class="address">{{ address.address_2 }}</div>
+		</div>
+		<div class="addressBlock">
 			<div class="formLabel">City</div>
-			<div class="formInfo">{{ address.city }}</div><br>
+			<div class="city">{{ address.city }}</div>
 			<div class="formLabel">State</div>
-			<div class="formInfo">{{ address.state }}</div>
+			<div class="city">{{ address.state }}</div>
 			<div class="formLabel">Zip Code</div>
-			<div class="formInfo">{{ address.zipcode }}</div>
+			<div class="city">{{ address.zipcode }}</div>
 		</div>
 
 		<div class="formBlock">
@@ -53,20 +56,16 @@
 		</div>
 
 		<div class="formBlock">
-			<div class="formLabel">Gender</div>
-			<div class="formInfo">{{ client.gen.gender }}</div>
+			
 			<div class="formLabel">Race</div>
 			<div class="formInfo">{{ client.race.race.race }}</div>
 			<div class="formLabel">Ethnicity</div>
 			<div class="formInfo">{{ client.eth.ethnicity }}</div>
-		</div>
-
-		<div class="formBlock">
 			<div class="formLabel">Veteran Status</div>
 			{% if client.veteran %}
-			<div class="formInfo">Yes</div>
+			<div class="checkbox checked"></div>
 			{% else %}
-			<div class="formInfo">No</div>
+			<div class="checkbox"></div>
 			{% endif %}
 
 			<div class="formLabel">Active Military</div>
