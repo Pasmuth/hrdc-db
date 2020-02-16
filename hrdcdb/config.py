@@ -16,6 +16,6 @@ class Config(object):
 
 	SQLALCHEMY_DATABASE_URI = (
 	    'mysql+pymysql://{user}:{password}@localhost/{database}'
-	    '?unix_socket=/cloudsql/{connection_name}').format(
+	    '?cloudsql/{connection_name}').format(
 	        user=USER, password=PASSWORD,
 	        database=DATABASE, connection_name=CONNECTION_NAME)
