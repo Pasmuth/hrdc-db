@@ -2,20 +2,15 @@
 
 This is my project to create an alternative to CaseWorthy. I'm going to use Python Flask to build the forms and interface logic, and SQLAlchemy to build the database logic.
 
-<<<<<<< HEAD
+
 ## Current Branch Projects
 
-This branch is to merge into before merging into master
+- Run the cloud_sql_proxy to connect to the gcloud sql database
+  - `cloud_sql_proxy -instances=hrdc-db:us-west1:flaskdb=tcp:3306`
+  - Keep this running in its own terminal while testing locally
+- There will need to be a different connection string when the app is deployed
 
-||||||| merged common ancestors
-## Current Branch Projects
 
-- Add outcome matrix functionality
-  - Domains
-  - Scores at time
-
-=======
->>>>>>> jatesting
 ## Current Version: 0.3
 
 The current 'stable' version has a few core features:

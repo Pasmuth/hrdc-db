@@ -2,6 +2,7 @@ import sys
 import pdfkit
 import os
 import json
+from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request, jsonify, send_file, make_response, json
 from werkzeug.urls import url_parse
 from flask_login import current_user, login_user, logout_user, login_required
@@ -9,7 +10,6 @@ from app import app, db
 from app.forms import *
 from app.models import *
 from app.kiosk import checkin_to_db
-from flask import json
 
 @app.route('/login', methods = ['GET','POST'])
 def login():
@@ -326,7 +326,8 @@ def add_family_service(familyid):
 @app.route('/client_checkin', methods = ['GET','POST'])
 def client_checkin():
 	checkin_to_db()
-	lobby = Kiosk.query.all()
+	today = datetime.today()
+	lobby = Kiosk.query.filter(Kiosk.timestamp.date() == datetime.today.date())
 	return render_template('client_checkin.html', lobby = lobby)
 
 

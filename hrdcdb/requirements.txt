@@ -1,0 +1,10 @@
+Flask==1.0.2
+Flask-Login==0.4.1
+Flask-SQLAlchemy==2.4.1
+Flask-Migrate==2.4.0
+Flask-WTF==0.14.2
+gspread==3.1.0
+pdfkit==0.6.1
+seaborn==0.9.0
+werkzeug==0.14.1
+oauth2client
